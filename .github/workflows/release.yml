@@ -34,5 +34,4 @@ jobs:
         with:
           node-version: '18'
           registry-url: 'https://registry.npmjs.org'
-      - run: npm ci
       - run: npm publish --ignore-scripts
