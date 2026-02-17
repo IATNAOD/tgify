@@ -5,11 +5,13 @@
 
 <p>Modern Telegram Bot API framework for Node.js</p>
 
+<i>This is a fork of the Telegraf library and its continuation as I envision it. I will do my best to maintain full compatibility so that anyone who lacks certain functionality can migrate to this solution quickly and without friction.</i>
+
 <a href="https://core.telegram.org/bots/api">
 	<img src="https://img.shields.io/badge/Bot%20API-v7.1-f36caf.svg?style=flat-square" alt="Bot API Version" />
 </a>
-<a href="https://packagephobia.com/result?p=tgify,node-telegram-bot-api">
-	<img src="https://flat.badgen.net/packagephobia/install/tgify" alt="install size" />
+<a href="https://packagephobia.com/result?p=@tgify/tgify,node-telegram-bot-api">
+	<img src="https://flat.badgen.net/packagephobia/install/@tgify/tgify" alt="install size" />
 </a>
 <a href="https://github.com/IATNAOD/tgify">
 	<img src="https://img.shields.io/github/languages/top/IATNAOD/tgify?style=flat-square&logo=github" alt="GitHub top language" />
@@ -30,7 +32,7 @@ Tgify is a library that makes it simple for you to develop your own Telegram bot
 
 - Full [Telegram Bot API 7.1](https://core.telegram.org/bots/api) support
 - [Excellent TypeScript typings](https://github.com/IATNAOD/tgify/releases/tag/v4.0.0)
-- [Lightweight](https://packagephobia.com/result?p=tgify,node-telegram-bot-api)
+- [Lightweight](https://packagephobia.com/result?p=@tgify/tgify,node-telegram-bot-api)
 - [AWS **λ**](https://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-handler.html)
   / [Firebase](https://firebase.google.com/products/functions/)
   / [Glitch](https://glitch.com/edit/#!/dashing-light)
@@ -42,8 +44,8 @@ Tgify is a library that makes it simple for you to develop your own Telegram bot
 ### Example
 
 ```js
-const { Telegraf } = require('telegraf')
-const { message } = require('telegraf/filters')
+const { Telegraf } = require('@tgify/tgify')
+const { message } = require('@tgify/tgify/filters')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.start((ctx) => ctx.reply('Welcome'))
@@ -58,7 +60,7 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'))
 ```
 
 ```js
-const { Telegraf } = require('telegraf')
+const { Telegraf } = require('@tgify/tgify')
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 bot.command('oldschool', (ctx) => ctx.reply('Hello'))
@@ -76,7 +78,7 @@ For additional bot examples see the new [`docs repo`](https://github.com/feather
 
 - [Getting started](#getting-started)
 - [GitHub Discussions](https://github.com/IATNAOD/tgify/discussions)
-- [Dependent repositories](https://libraries.io/npm/tgify/dependent_repositories)
+- [Dependent repositories](https://libraries.io/npm/@tgify/tgify/dependent_repositories)
 
 ## Getting started
 
@@ -91,19 +93,19 @@ BotFather will give you a _token_, something like `123456789:AbCdefGhIJKlmNoPQRs
 ### Installation
 
 ```shellscript
-$ npm install tgify
+$ npm install @tgify/tgify
 ```
 
 or
 
 ```shellscript
-$ yarn add tgify
+$ yarn add @tgify/tgify
 ```
 
 or
 
 ```shellscript
-$ pnpm add tgify
+$ pnpm add @tgify/tgify
 ```
 
 ### `Telegraf` class
@@ -124,8 +126,8 @@ This is probably the class you'll be using the most.
 #### Shorthand methods
 
 ```js
-import { Telegraf } from 'telegraf'
-import { message } from 'telegraf/filters'
+import { Telegraf } from '@tgify/tgify'
+import { message } from '@tgify/tgify/filters'
 
 const bot = new Telegraf(process.env.BOT_TOKEN)
 
@@ -174,8 +176,8 @@ process.once('SIGTERM', () => bot.stop('SIGTERM'))
 ### Webhooks
 
 ```TS
-import { Telegraf } from "telegraf";
-import { message } from 'telegraf/filters';
+import { Telegraf } from "@tgify/tgify";
+import { message } from '@tgify/tgify/filters';
 
 const bot = new Telegraf(token);
 
@@ -285,8 +287,8 @@ As in Koa and some other middleware-based libraries,
 `await next()` will call next middleware and wait for it to finish:
 
 ```TS
-import { Telegraf } from 'telegraf';
-import { message } from 'telegraf/filters';
+import { Telegraf } from '@tgify/tgify';
+import { message } from '@tgify/tgify/filters';
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -335,7 +337,7 @@ Consequently, you can change the type of `ctx` to fit your needs in order for yo
 This is done through Generics:
 
 ```ts
-import { Context, Telegraf } from 'telegraf'
+import { Context, Telegraf } from '@tgify/tgify'
 
 // Define your own context type
 interface MyContext extends Context {
