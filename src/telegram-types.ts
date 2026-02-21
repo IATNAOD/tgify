@@ -104,6 +104,10 @@ export type ExtraEditMessageText = MakeExtra<
   'editMessageText',
   'message_id' | 'inline_message_id' | 'text'
 >
+export type ExtraSavePreparedInlineMessage = MakeExtra<
+  'savePreparedInlineMessage',
+  'user_id' | 'result'
+>
 export type ExtraGame = MakeExtra<'sendGame', 'game_short_name'>
 export type NewInvoiceParameters = MakeExtra<
   'sendInvoice',
@@ -118,6 +122,7 @@ export type ExtraBanChatMember = MakeExtra<
   'user_id' | 'until_date'
 >
 export type ExtraKickChatMember = ExtraBanChatMember
+export type ExtraSetUserEmojiStatus = MakeExtra<'setUserEmojiStatus', 'user_id'>
 export type ExtraLocation = MakeExtra<'sendLocation', 'latitude' | 'longitude'>
 export type ExtraMediaGroup = MakeExtra<'sendMediaGroup', 'media'>
 export type ExtraPhoto = MakeExtra<'sendPhoto', 'photo'>
@@ -154,6 +159,17 @@ export type ExtraCreateForumTopic = MakeExtra<'createForumTopic', 'name'>
 export type ExtraEditForumTopic = MakeExtra<
   'editForumTopic',
   'message_thread_id'
+>
+export type ExtraSendGift = MakeExtra<
+  'sendGift',
+  'gift_id'
+>
+export type ExtraVerifyUser = MakeExtra<
+  'verifyUser',
+  'user_id'
+>
+export type ExtraVerifyChat = MakeExtra<
+  'verifyChat'
 >
 
 export type MediaGroup =

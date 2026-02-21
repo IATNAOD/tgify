@@ -358,8 +358,18 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
    */
   refundStarPayment(...args: Shorthand<'refundStarPayment'>) {
     this.assert(this.from, 'refundStarPayment')
-    console.log(this.from.id, ...args)
     return this.telegram.refundStarPayment(
+      this.from.id,
+      ...args
+    )
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#edituserstarsubscription
+   */
+  editUserStarSubscription(...args: Shorthand<'editUserStarSubscription'>) {
+    this.assert(this.from, 'editUserStarSubscription')
+    return this.telegram.editUserStarSubscription(
       this.from.id,
       ...args
     )
@@ -1056,6 +1066,22 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#getuserprofilephotos
+   */
+  getUserProfilePhotos(offset?: number, limit?: number) {
+    this.assert(this.from, 'getUserProfilePhotos')
+    return this.telegram.getUserProfilePhotos(this.from.id, offset, limit)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#setuseremojistatus
+   */
+  setUserEmojiStatus(extra?: tt.ExtraSetUserEmojiStatus) {
+    this.assert(this.from, 'setUserEmojiStatus')
+    return this.telegram.setUserEmojiStatus(this.from.id, extra)
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#sendlocation
    */
   sendLocation(latitude: number, longitude: number, extra?: tt.ExtraLocation) {
@@ -1570,6 +1596,59 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
     extra?: Parameters<Telegram['getMyDefaultAdministratorRights']>[0]
   ) {
     return this.telegram.getMyDefaultAdministratorRights(extra)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#getavailablegifts
+   */
+  getAvailableGifts() {
+    return this.telegram.getAvailableGifts()
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#sendgift
+   */
+  sendGift(giftId: string, extra?: tt.ExtraSendGift) {
+    this.assert(this.chat, 'sendGift')
+    this.assert(this.from, 'sendGift')
+    return this.telegram.sendGift(giftId, {
+      ...(this.from ? { user_id: this.from?.id }
+        : this.chat ? { chat_id: this.chat?.id }
+          : {}),
+      ...extra
+    })
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#verifyuser
+   */
+  verifyUser(...args: Shorthand<'verifyUser'>) {
+    this.assert(this.from, 'verifyUser')
+    return this.telegram.verifyUser(this.from.id, ...args)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#verifychat
+   */
+  verifyChat(...args: Shorthand<'verifyChat'>) {
+    this.assert(this.chat, 'verifyChat')
+    return this.telegram.verifyChat(this.chat.id, ...args)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#removeuserverification
+   */
+  removeUserVerification() {
+    this.assert(this.from, 'removeUserVerification')
+    return this.telegram.removeUserVerification(this.from.id)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#removechatverification
+   */
+  removeChatVerification() {
+    this.assert(this.chat, 'removeChatVerification')
+    return this.telegram.removeChatVerification(this.chat?.id)
   }
 }
 

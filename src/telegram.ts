@@ -218,12 +218,28 @@ export class Telegram extends ApiClient {
     })
   }
 
+  /**
+   * Use this method to get a list of profile pictures for a user. Returns a UserProfilePhotos object.
+   * @param userId Unique identifier of the target user
+   * @param offset Sequential number of the first photo to be returned. By default, all photos are returned.
+   * @param limit Limits the number of photos to be retrieved. Values between 1-100 are accepted. Defaults to 100.
+   */
   getUserProfilePhotos(userId: number, offset?: number, limit?: number) {
     return this.callApi('getUserProfilePhotos', {
       user_id: userId,
       offset,
       limit,
     })
+  }
+
+  /**
+   * Changes the emoji status for a given user that previously allowed the bot to manage their emoji status via the Mini App method requestEmojiStatusAccess. Returns True on success.
+   * @param userId Unique identifier of the target user
+   * @param extra.statusCustomEmojiId Custom emoji identifier of the emoji status to set. Pass an empty string to remove the status.
+   * @param extra.statusExpirationDate Expiration date of the emoji status, if any
+   */
+  setUserEmojiStatus(userId: number, extra?: tt.ExtraSetUserEmojiStatus) {
+    return this.callApi('setUserEmojiStatus', { user_id: userId, ...extra, })
   }
 
   /**
@@ -900,18 +916,40 @@ export class Telegram extends ApiClient {
     })
   }
 
+  /**
+   * Use this method to set the result of an interaction with a Web App and send a corresponding message on behalf of the user to the chat from which the query originated. On success, a SentWebAppMessage object is returned.
+   * @param web_app_query_id  Unique identifier for the query to be answered
+   * @param result A JSON-serialized object describing the message to be sent
+   */
   answerWebAppQuery(webAppQueryId: string, result: tg.InlineQueryResult) {
     return this.callApi('answerWebAppQuery', {
-      web_app_query_id: webAppQueryId,
       result,
+      web_app_query_id: webAppQueryId,
     })
   }
 
   /**
- * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
- * @param offset  Number of transactions to skip in the response
- * @param limit The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100
- */
+   * Stores a message that can be sent by a user of a Mini App. Returns a PreparedInlineMessage object.
+   * @param userId Unique identifier of the target user that can use the prepared message
+   * @param result A JSON-serialized object describing the message to be sent
+   * @param extra.allow_user_chats Pass True if the message can be sent to private chats with users
+   * @param extra.allow_bot_chats Pass True if the message can be sent to private chats with bots
+   * @param extra.allow_group_chats Pass True if the message can be sent to group and supergroup chats
+   * @param extra.allow_channel_chats Pass True if the message can be sent to channel chats
+   */
+  savePreparedInlineMessage(userId: number, result: tg.InlineQueryResult, extra?: tt.ExtraSavePreparedInlineMessage) {
+    return this.callApi('savePreparedInlineMessage', {
+      result,
+      user_id: userId,
+      ...extra
+    })
+  }
+
+  /**
+   * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
+   * @param offset  Number of transactions to skip in the response
+   * @param limit The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100
+   */
   getStarTransactions(
     offset?: number,
     limit?: number
@@ -923,10 +961,10 @@ export class Telegram extends ApiClient {
   }
 
   /**
- * Refunds a successful payment in Telegram Stars. Returns True on success.
- * @param userId  Identifier of the user whose payment will be refunded
- * @param paymentChargeId Telegram payment identifier
- */
+   * Refunds a successful payment in Telegram Stars. Returns True on success.
+   * @param userId  Identifier of the user whose payment will be refunded
+   * @param paymentChargeId Telegram payment identifier
+   */
   refundStarPayment(
     userId: number,
     paymentChargeId: string
@@ -934,6 +972,24 @@ export class Telegram extends ApiClient {
     return this.callApi('refundStarPayment', {
       user_id: userId,
       telegram_payment_charge_id: paymentChargeId,
+    })
+  }
+
+  /**
+   * Allows the bot to cancel or re-enable extension of a subscription paid in Telegram Stars. Returns True on success.
+   * @param userId  Identifier of the user whose subscription will be edited
+   * @param paymentChargeId Telegram payment identifier for the subscription
+   * @param isCanceled Pass True to cancel extension of the user subscription; the subscription must be active up to the end of the current subscription period. Pass False to allow the user to re-enable a subscription that was previously canceled by the bot.
+   */
+  editUserStarSubscription(
+    userId: number,
+    paymentChargeId: string,
+    isCanceled: boolean
+  ) {
+    return this.callApi('editUserStarSubscription', {
+      user_id: userId,
+      telegram_payment_charge_id: paymentChargeId,
+      is_canceled: isCanceled
     })
   }
 
@@ -1707,6 +1763,61 @@ export class Telegram extends ApiClient {
     return this.callApi('getMyDefaultAdministratorRights', {
       for_channels: forChannels,
     })
+  }
+
+  /**
+   * Returns the list of gifts that can be sent by the bot to users and channel chats. Requires no parameters. Returns a Gifts object.
+   */
+  getAvailableGifts() {
+    return this.callApi('getAvailableGifts', {})
+  }
+
+  /**
+   * Sends a gift to the given user or channel chat. The gift can't be converted to Telegram Stars by the receiver. Returns True on success.
+   * @param giftId Identifier of the gift; limited gifts can't be sent to channel chats
+   * @param extra.user_id Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.
+   * @param extra.chat_id Required if user_id is not specified. Unique identifier for the chat or username of the channel (in the format @channelusername) that will receive the gift.
+   * @param extra.pay_for_upgrade Pass True to pay for the gift upgrade from the bot's balance, thereby making the upgrade free for the receiver
+   * @param extra.text Text that will be shown along with the gift; 0-128 characters
+   * @param extra.text_parse_mode Mode for parsing entities in the text. See formatting options for more details. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+   * @param extra.text_entities A JSON-serialized list of special entities that appear in the gift text. It can be specified instead of text_parse_mode. Entities other than “bold”, “italic”, “underline”, “strikethrough”, “spoiler”, and “custom_emoji” are ignored.
+   */
+  sendGift(giftId: string, extra?: tt.ExtraSendGift) {
+    return this.callApi('sendGift', { gift_id: giftId, ...extra })
+  }
+
+  /**
+   * Verifies a user on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param userId Unique identifier of the target user
+   * @param extra.custom_description Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  verifyUser(userId: number, extra?: tt.ExtraVerifyUser) {
+    return this.callApi('verifyUser', { user_id: userId, ...extra })
+  }
+
+  /**
+   * Verifies a chat on behalf of the organization which is represented by the bot. Returns True on success.
+   * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified.
+   * @param extra.custom_description Custom description for the verification; 0-70 characters. Must be empty if the organization isn't allowed to provide a custom verification description.
+   */
+  verifyChat(chatId: number | string, extra?: tt.ExtraVerifyChat) {
+    return this.callApi('verifyChat', { chat_id: chatId, ...extra })
+  }
+
+  /**
+   * Removes verification from a user who is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param userId Unique identifier of the target user
+   */
+  removeUserVerification(userId: number) {
+    return this.callApi('removeUserVerification', { user_id: userId })
+  }
+
+  /**
+   * Removes verification from a chat that is currently verified on behalf of the organization represented by the bot. Returns True on success.
+   * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername). Channel direct messages chats can't be verified.
+   */
+  removeChatVerification(chatId: number | string) {
+    return this.callApi('removeChatVerification', { chat_id: chatId })
   }
 
   /**
