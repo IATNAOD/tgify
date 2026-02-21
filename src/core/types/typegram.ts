@@ -44,6 +44,8 @@ export type InputMediaVideo = Typegram.InputMediaVideo<InputFile>
 export type InputMediaAnimation = Typegram.InputMediaAnimation<InputFile>
 export type InputMediaAudio = Typegram.InputMediaAudio<InputFile>
 export type InputMediaDocument = Typegram.InputMediaDocument<InputFile>
+export type InputPaidMediaPhoto = Typegram.InputPaidMediaPhoto<InputFile>
+export type InputPaidMediaVideo = Typegram.InputPaidMediaVideo<InputFile>
 
 // tiny helper types
 export type ChatAction = Opts<'sendChatAction'>['action']

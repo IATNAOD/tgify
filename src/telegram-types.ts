@@ -10,6 +10,8 @@ import {
   InputMediaDocument,
   InputMediaPhoto,
   InputMediaVideo,
+  InputPaidMediaPhoto,
+  InputPaidMediaVideo,
 } from './core/types/typegram'
 
 import { UnionKeys } from './core/helpers/deunionize'
@@ -78,6 +80,14 @@ export type ExtraEditChatInviteLink = MakeExtra<
   'editChatInviteLink',
   'invite_link'
 >
+export type ExtraCreateChatSubscriptionInviteLink = MakeExtra<
+  'createChatSubscriptionInviteLink',
+  'subscription_period' | 'subscription_price'
+>
+export type ExtraEditChatSubscriptionInviteLink = MakeExtra<
+  'editChatSubscriptionInviteLink',
+  'invite_link'
+>
 export type ExtraEditMessageCaption = MakeExtra<
   'editMessageCaption',
   'message_id' | 'inline_message_id' | 'caption'
@@ -134,6 +144,7 @@ export type ExtraVenue = MakeExtra<
 >
 export type ExtraVideo = MakeExtra<'sendVideo', 'video'>
 export type ExtraVideoNote = MakeExtra<'sendVideoNote', 'video_note'>
+export type ExtraPaidMedia = MakeExtra<'sendPaidMedia', 'media' | 'caption' | 'star_count'>
 export type ExtraVoice = MakeExtra<'sendVoice', 'voice'>
 export type ExtraBanChatSenderChat = MakeExtra<
   'banChatSenderChat',
@@ -149,6 +160,11 @@ export type MediaGroup =
   | readonly (InputMediaPhoto | InputMediaVideo)[]
   | readonly InputMediaAudio[]
   | readonly InputMediaDocument[]
+
+export type PaidMediaGroup =
+  | (InputPaidMediaPhoto | InputPaidMediaVideo)[]
+  | InputPaidMediaPhoto[]
+  | InputPaidMediaVideo[]
 
 // types used for inference of ctx object
 

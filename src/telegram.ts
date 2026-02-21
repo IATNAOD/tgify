@@ -410,6 +410,26 @@ export class Telegram extends ApiClient {
   }
 
   /**
+   * Use this method to send paid media. On success, the sent Message is returned.
+   * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param starCount The number of Telegram Stars that must be paid to buy access to the media; 1-25000
+   * @param media A JSON-serialized array describing the media to be sent; up to 10 items
+   */
+  sendPaidMedia(
+    chatId: number | string,
+    starCount: number,
+    media: tt.PaidMediaGroup,
+    extra?: tt.ExtraPaidMedia
+  ) {
+    return this.callApi('sendPaidMedia', {
+      media: media,
+      chat_id: chatId,
+      star_count: starCount,
+      ...extra,
+    })
+  }
+
+  /**
    * Send audio files, if you want Telegram clients to display the file as a playable voice message. For this to work, your audio must be in an .ogg file encoded with OPUS (other formats may be sent as Audio or Document). On success, the sent Message is returned. Bots can currently send voice messages of up to 50 MB in size, this limit may be changed in the future.
    * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
    */
@@ -677,6 +697,46 @@ export class Telegram extends ApiClient {
     })
   }
 
+  /**
+   * Use this method to create a subscription invite link for a channel chat. The bot must have the can_invite_users administrator rights.
+   * The link can be edited using the method editChatSubscriptionInviteLink or revoked using the method revokeChatInviteLink.
+   * Returns the new invite link as a ChatInviteLink object.
+   * @param chatId Unique identifier for the target channel chat or username of the target channel (in the format @channelusername)
+   * @param subscriptionPrice The amount of Telegram Stars a user must pay initially and after each subsequent subscription period to be a member of the chat; 1-10000
+   * @param extra.name Invite link name; 0-32 characters
+   */
+  createChatSubscriptionInviteLink(
+    chatId: number | string,
+    subscriptionPrice: number,
+    extra?: tt.ExtraCreateChatSubscriptionInviteLink
+  ) {
+    return this.callApi('createChatSubscriptionInviteLink', {
+      chat_id: chatId,
+      subscription_price: subscriptionPrice,
+      subscription_period: 2592000,
+      ...extra,
+    })
+  }
+
+  /**
+   * Use this method to edit a subscription invite link created by the bot. The bot must have the can_invite_users administrator rights.
+   * Returns the edited invite link as a ChatInviteLink object.
+   * @param chatId Unique identifier for the target chat or username of the target channel (in the format @channelusername)
+   * @param inviteLink The invite link to edit
+   * @param extra.name Invite link name; 0-32 characters
+   */
+  editChatSubscriptionInviteLink(
+    chatId: number | string,
+    inviteLink: string,
+    extra?: tt.ExtraEditChatSubscriptionInviteLink
+  ) {
+    return this.callApi('editChatSubscriptionInviteLink', {
+      chat_id: chatId,
+      invite_link: inviteLink,
+      ...extra,
+    })
+  }
+
   revokeChatInviteLink(chatId: number | string, inviteLink: string) {
     return this.callApi('revokeChatInviteLink', {
       chat_id: chatId,
@@ -844,6 +904,36 @@ export class Telegram extends ApiClient {
     return this.callApi('answerWebAppQuery', {
       web_app_query_id: webAppQueryId,
       result,
+    })
+  }
+
+  /**
+ * Returns the bot's Telegram Star transactions in chronological order. On success, returns a StarTransactions object.
+ * @param offset  Number of transactions to skip in the response
+ * @param limit The maximum number of transactions to be retrieved. Values between 1-100 are accepted. Defaults to 100
+ */
+  getStarTransactions(
+    offset?: number,
+    limit?: number
+  ) {
+    return this.callApi('getStarTransactions', {
+      limit,
+      offset,
+    })
+  }
+
+  /**
+ * Refunds a successful payment in Telegram Stars. Returns True on success.
+ * @param userId  Identifier of the user whose payment will be refunded
+ * @param paymentChargeId Telegram payment identifier
+ */
+  refundStarPayment(
+    userId: number,
+    paymentChargeId: string
+  ) {
+    return this.callApi('refundStarPayment', {
+      user_id: userId,
+      telegram_payment_charge_id: paymentChargeId,
     })
   }
 

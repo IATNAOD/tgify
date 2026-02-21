@@ -86,6 +86,10 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
     return this.update.pre_checkout_query as PropOr<U, 'pre_checkout_query'>
   }
 
+  get purchasedPaidMedia() {
+    return this.update.purchased_paid_media as PropOr<U, 'purchased_paid_media'>
+  }
+
   get chosenInlineResult() {
     return this.update.chosen_inline_result as PropOr<U, 'chosen_inline_result'>
   }
@@ -330,6 +334,25 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
   }
 
   /**
+   * @see https://core.telegram.org/bots/api#getstartransactions
+   */
+  getStarTransactions(offset?: number, limit?: number,) {
+    return this.telegram.getStarTransactions(offset, limit)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#refundstarpayment
+   */
+  refundStarPayment(...args: Shorthand<'refundStarPayment'>) {
+    this.assert(this.from, 'refundStarPayment')
+    console.log(this.from.id, ...args)
+    return this.telegram.refundStarPayment(
+      this.from.id,
+      ...args
+    )
+  }
+
+  /**
    * @see https://core.telegram.org/bots/api#editmessagetext
    */
   editMessageText(text: string | FmtString, extra?: tt.ExtraEditMessageText) {
@@ -470,6 +493,22 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
   editChatInviteLink(...args: Shorthand<'editChatInviteLink'>) {
     this.assert(this.chat, 'editChatInviteLink')
     return this.telegram.editChatInviteLink(this.chat.id, ...args)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#createchatsubscriptioninvitelink
+   */
+  createChatSubscriptionInviteLink(...args: Shorthand<'createChatSubscriptionInviteLink'>) {
+    this.assert(this.chat, 'createChatSubscriptionInviteLink')
+    return this.telegram.createChatSubscriptionInviteLink(this.chat.id, ...args)
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#editchatsubscriptioninvitelink
+   */
+  editChatSubscriptionInviteLink(...args: Shorthand<'editChatSubscriptionInviteLink'>) {
+    this.assert(this.chat, 'editChatSubscriptionInviteLink')
+    return this.telegram.editChatSubscriptionInviteLink(this.chat.id, ...args)
   }
 
   /**
@@ -790,6 +829,18 @@ export class Context<U extends Deunionize<tg.Update> = tg.Update> {
       message_thread_id: getThreadId(this),
       ...extra,
     })
+  }
+
+  /**
+   * @see https://core.telegram.org/bots/api#sendpaidmedia
+   */
+  sendPaidMedia(
+    starCount: number,
+    media: tt.PaidMediaGroup,
+    extra?: tt.ExtraPaidMedia
+  ) {
+    this.assert(this.chat, 'sendPaidMedia')
+    return this.telegram.sendPaidMedia(this.chat.id, starCount, media, { ...extra, })
   }
 
   /**

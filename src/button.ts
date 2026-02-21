@@ -125,6 +125,15 @@ export function callback(
   return { text, callback_data: data, hide, ...extra }
 }
 
+export function copyText(
+  text: string,
+  copy_text: string,
+  hide = false,
+  extra?: Pick<InlineKeyboardButton.CopyText, 'style' | 'icon_custom_emoji_id'>,
+): Hideable<InlineKeyboardButton.CopyText> {
+  return { text, copy_text: { text: copy_text }, hide, ...extra }
+}
+
 export function switchToChat(
   text: string,
   value: string,
