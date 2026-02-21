@@ -126,11 +126,13 @@
   },
   "keywords": [
     "tgify",
+    "telegraf",
     "telegram",
-    "telegram bot api",
     "bot",
-    "botapi",
-    "bot framework"
+    "api",
+    "client",
+    "framework",
+    "library"
   ],
   "directories": {
     "doc": "docs",
